@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Analyzer</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial;
+        }
+        input, button {
+            padding: 5px;
+            margin: 5px 0;
+        }
+        .error { color: red; }
+        .success { color: green; }
+        a {
+            color: red;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Analyzer</h1>
+    
+    <form method="POST" action="/add">
+        Name: <input type="text" name="name" required><br>
+        Marks: <input type="number" name="marks" required><br>
+        <button type="submit">Add Student</button>
+    </form>
+    <h3>📤 Import Students from Excel/CSV</h3>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv, .xlsx" required><br>
+        <button type="submit">Upload File</button>
+    </form>
+
+    {% if message %}
+    <p class="{{ 'success' if 'added' in message else 'error' }}">{{ message }}</p>
+    {% endif %}
+
+    <h2>Student List</h2>
+    <ul>
+    {% for student in students %}
+        <li>{{ student.name }} - {{ student.marks }}
+            <a href="/delete/{{ loop.index0 }}">❌ Delete</a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <br>
+    <a href="/analyze" style="color:white; font-weight:bold;">▶ Analyze All Students</a>
+    <br>
+    <a href="/clear" style="color:red; font-weight:bold;">🗑️ Clear All Students</a>
+
+</body>
+</html>

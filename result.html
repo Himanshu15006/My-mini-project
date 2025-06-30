@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analysis Result</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff3333;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ff3333;
+            padding-bottom: 10px;
+        }
+
+        .stats {
+            margin: 1rem auto;
+            max-width: 600px;
+            padding: 1rem;
+            background: #111111;
+            border-left: 5px solid #ff3333;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+        }
+
+        .grades {
+            margin: 2rem auto;
+            max-width: 600px;
+            padding: 1rem;
+            background: #111111;
+            border-left: 5px solid #ff3333;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li::before {
+            content: "🔴 ";
+            margin-right: 0.5rem;
+        }
+
+        .chart {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        img {
+            max-width: 80%;
+            height: auto;
+            border: 3px solid #ff3333;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            text-align: center;
+            color: #ff3333;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .back-link:hover {
+            color: #ffffff;
+            background-color: #ff3333;
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📊 Analysis Report</h1>
+
+    <div class="stats">
+        <p><strong>Average Marks:</strong> {{ avg }}</p>
+        <p><strong>Highest Scorer:</strong> {{ highest['name'] }} - {{ highest['marks'] }}</p>
+        <p><strong>Lowest Scorer:</strong> {{ lowest['name'] }} - {{ lowest['marks'] }}</p>
+        <p><strong>Passed:</strong> {{ passed }}</p>
+        <p><strong>Failed:</strong> {{ failed }}</p>
+    </div>
+
+    <div class="grades">
+        <h2>Grade Distribution:</h2>
+        <ul>
+            {% for grade, count in grades.items() %}
+            <li><strong>{{ grade }}:</strong> {{ count }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="chart">
+        <img src="{{ url_for('static', filename='grades_chart.png') }}" alt="Grade Distribution Chart">
+    </div>
+
+    <div style="text-align:center;">
+        <a class="back-link" href="/">← Back to Home</a>
+    </div>
+
+</body>
+</html>
