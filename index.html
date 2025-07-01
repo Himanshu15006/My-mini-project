@@ -1,56 +1,170 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Analyzer</title>
+    <title>Student Marks Analyzer</title>
     <style>
         body {
-            background-color: black;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        h1 {
+            color: #ff3333;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #111;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+            color: #ff6666;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 0.7rem;
+            margin-top: 0.5rem;
+            background-color: #222;
+            border: 1px solid #ff3333;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #ff3333;
             color: white;
-            font-family: Arial;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            margin-top: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
         }
-        input, button {
-            padding: 5px;
-            margin: 5px 0;
+
+        button:hover {
+            background-color: #cc0000;
         }
-        .error { color: red; }
-        .success { color: green; }
-        a {
-            color: red;
-            margin-left: 10px;
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background-color: #111;
+            border: 1px solid #ff3333;
+        }
+
+        th, td {
+            border: 1px solid #ff3333;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #222;
+            color: #ff6666;
+        }
+
+        tr:hover {
+            background-color: #1a1a1a;
+        }
+
+        .actions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .link-btn {
+            text-decoration: none;
+            color: white;
+            background-color: #ff3333;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: bold;
+            margin: 0 0.5rem;
+        }
+
+        .link-btn:hover {
+            background-color: #cc0000;
+        }
+
+        .message {
+            margin-top: 1rem;
+            color: #ff6666;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <h1>Student Analyzer</h1>
-    
-    <form method="POST" action="/add">
-        Name: <input type="text" name="name" required><br>
-        Marks: <input type="number" name="marks" required><br>
-        <button type="submit">Add Student</button>
-    </form>
-    <h3>📤 Import Students from Excel/CSV</h3>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".csv, .xlsx" required><br>
-        <button type="submit">Upload File</button>
-    </form>
 
-    {% if message %}
-    <p class="{{ 'success' if 'added' in message else 'error' }}">{{ message }}</p>
-    {% endif %}
+    <h1>📘 Student Marks Analyzer</h1>
+    <div class="container">
 
-    <h2>Student List</h2>
-    <ul>
-    {% for student in students %}
-        <li>{{ student.name }} - {{ student.marks }}
-            <a href="/delete/{{ loop.index0 }}">❌ Delete</a>
-        </li>
-    {% endfor %}
-    </ul>
+        {% if message %}
+        <p class="message">{{ message }}</p>
+        {% endif %}
 
-    <br>
-    <a href="/analyze" style="color:white; font-weight:bold;">▶ Analyze All Students</a>
-    <br>
-    <a href="/clear" style="color:red; font-weight:bold;">🗑️ Clear All Students</a>
+        <!-- Add Student Form -->
+        <form action="/add" method="POST">
+            <label for="name">Student Name:</label>
+            <input type="text" name="name" required>
+
+            <label for="marks">Marks:</label>
+            <input type="number" name="marks" required min="0" max="100">
+
+            <button type="submit">➕ Add Student</button>
+        </form>
+
+        <!-- Upload Excel File -->
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="file">📤 Upload Excel/CSV File:</label>
+            <input type="file" name="file" accept=".xlsx, .csv" required>
+            <button type="submit">📂 Upload</button>
+        </form>
+
+        <!-- Table of Students -->
+        {% if students %}
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Marks</th>
+                <th>Action</th>
+            </tr>
+            {% for s in students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.marks }}</td>
+                <td><a class="link-btn" href="/delete/{{ loop.index0 }}">❌ Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="actions">
+            <a class="link-btn" href="/analyze">📊 Analyze All Students</a>
+            <a class="link-btn" href="/clear">🗑️ Clear All</a>
+        </div>
+
+    </div>
 
 </body>
 </html>
